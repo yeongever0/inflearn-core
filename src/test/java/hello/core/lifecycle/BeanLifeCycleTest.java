@@ -12,13 +12,14 @@ public class BeanLifeCycleTest {
         AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(LifeCycleConfig.class);
         NetworkClient client = ac.getBean(NetworkClient.class);
 
-        //close를 하거나 ConfigurableApplicationContext 사용
+        //close 하거나 ConfigurableApplicationContext 사용
         ac.close();
     }
 
     @Configuration
     static class LifeCycleConfig {
-        @Bean
+        //메소드 이름 자유로움, 스프링 코드 미의존, 외부 라이브러리에도 초기화, 종료 메서드 적용 가능
+        @Bean(initMethod = "init", destroyMethod = "close")
         public NetworkClient networkClient() {
             NetworkClient networkClient = new NetworkClient();
             networkClient.setUrl("http://hello-spring.dev");
